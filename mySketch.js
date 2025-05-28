@@ -1,8 +1,8 @@
-let pelicanX;
-let pelicanY;
-let speedX = 5; // increased speed for better control
-let direction = 1;
-let isMoving = false; // track if pelican is moving
+let pelicanX = 0;    // initial X position
+let pelicanY = 0;    // initial Y position
+let speedX = 5;      // movement speed
+let direction = 1;   // 1 for right, -1 for left
+let isMoving = false;
 
 let trail = [];
 let clouds = [];
@@ -34,22 +34,26 @@ function draw() {
   rect(0, height * 0.8, width, height * 0.2);
 
   // trail
-  drawTrail();
+  if (trail.length > 0) {
+    drawTrail();
+    // Clean up old trail particles
+    trail = trail.filter(t => t.alpha > 0);
+  }
 
-  // Reset movement flag
-  isMoving = false;
-
-  // Handle keyboard input for movement
+  // Movement handling
+  let oldX = pelicanX;  // Store old position to detect movement
+  
   if (keyIsDown(LEFT_ARROW)) {
     pelicanX -= speedX;
     direction = -1;
-    isMoving = true;
   }
   if (keyIsDown(RIGHT_ARROW)) {
     pelicanX += speedX;
     direction = 1;
-    isMoving = true;
   }
+
+  // Detect if pelican actually moved this frame
+  isMoving = oldX !== pelicanX;
 
   // Keep pelican within canvas bounds
   pelicanX = constrain(pelicanX, -100, width + 100);
@@ -61,9 +65,6 @@ function draw() {
   if (isMoving) {
     trail.push({ x: pelicanX, y: pelicanY + 35, alpha: 255 });
   }
-
-  // Clean up old trail particles
-  trail = trail.filter(t => t.alpha > 0);
 }
 
 function drawClouds() {
