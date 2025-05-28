@@ -1,7 +1,8 @@
 let pelicanX;
 let pelicanY;
-let speedX;
+let speedX = 5; // increased speed for better control
 let direction = 1;
+let isMoving = false; // track if pelican is moving
 
 let trail = [];
 let clouds = [];
@@ -36,17 +37,27 @@ function draw() {
   // trail
   drawTrail();
 
+  // Handle keyboard input
+  isMoving = false;
+  if (keyIsDown(LEFT_ARROW)) {
+    pelicanX -= speedX;
+    direction = -1;
+    isMoving = true;
+  }
+  if (keyIsDown(RIGHT_ARROW)) {
+    pelicanX += speedX;
+    direction = 1;
+    isMoving = true;
+  }
+
+  // Keep pelican within canvas bounds
+  pelicanX = constrain(pelicanX, -100, width + 100);
+
   drawPelicanOnBike(pelicanX, pelicanY);
 
-  // update pelican position
-  pelicanX += speedX * direction;
-
-  // Add trail puff
-  trail.push({ x: pelicanX, y: pelicanY + 35, alpha: 255 });
-
-  // Reverse direction at edges
-  if (pelicanX > width + 100 || pelicanX < -100) {
-    direction *= -1;
+  // Add trail puff only when moving
+  if (isMoving) {
+    trail.push({ x: pelicanX, y: pelicanY + 35, alpha: 255 });
   }
 
   // Limit trail length
