@@ -36,8 +36,10 @@ function draw() {
   // trail
   drawTrail();
 
-  // Handle keyboard input
+  // Reset movement flag
   isMoving = false;
+
+  // Handle keyboard input for movement
   if (keyIsDown(LEFT_ARROW)) {
     pelicanX -= speedX;
     direction = -1;
@@ -52,6 +54,7 @@ function draw() {
   // Keep pelican within canvas bounds
   pelicanX = constrain(pelicanX, -100, width + 100);
 
+  // Draw the pelican
   drawPelicanOnBike(pelicanX, pelicanY);
 
   // Add trail puff only when moving
@@ -59,10 +62,8 @@ function draw() {
     trail.push({ x: pelicanX, y: pelicanY + 35, alpha: 255 });
   }
 
-  // Limit trail length
-  if (trail.length > 100) {
-    trail.shift();
-  }
+  // Clean up old trail particles
+  trail = trail.filter(t => t.alpha > 0);
 }
 
 function drawClouds() {
