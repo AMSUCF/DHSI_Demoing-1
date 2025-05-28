@@ -11,7 +11,6 @@ function setup() {
   createCanvas(windowWidth, windowHeight);
   pelicanX = 0;
   pelicanY = height * 0.7;
-  speedX = 2;
 
   // Create initial clouds
   for (let i = 0; i < 5; i++) {
