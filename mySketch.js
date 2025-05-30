@@ -6,6 +6,7 @@ let isMoving = false;
 
 let trail = [];
 let clouds = [];
+let sky = [];
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
